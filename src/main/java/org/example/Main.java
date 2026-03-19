@@ -81,10 +81,10 @@ public class Main {
         try (PDDocument doc = Loader.loadPDF(inputPdf)) {
 
             PDAcroForm form = doc.getDocumentCatalog().getAcroForm();
-            form.getField("person_issuername").setPartialName("person_issuerName");
-            form.getField("person_foreignIdCard").setPartialName("person_foreign");
-            form.getField("person_foreignIdCard2").setPartialName("person_foreignIdCard");
-            form.getField("person_curZip").setPartialName("person_currZip");
+//            form.getField("person_issuername").setPartialName("person_issuerName");
+//            form.getField("person_foreignIdCard").setPartialName("person_foreign");
+//            form.getField("person_foreignIdCard2").setPartialName("person_foreignIdCard");
+//            form.getField("person_curZip").setPartialName("person_currZip");
             if (form == null) {
                 throw new IllegalStateException("PDF does not contain an AcroForm (no form fields).");
             }
