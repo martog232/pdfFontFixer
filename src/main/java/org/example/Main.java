@@ -81,10 +81,10 @@ public class Main {
         try (PDDocument doc = Loader.loadPDF(inputPdf)) {
 
             PDAcroForm form = doc.getDocumentCatalog().getAcroForm();
-            form.getField("person_phone").setPartialName("person_curr_phone");
-//            form.getField("cb_state_by_email").setPartialName("cb_state_by_post");
-//            form.getField("temp").setPartialName("cb_state_by_email");
-//            form.getField("cb_state_by_paper").setPartialName("cb_state_by_post");
+            form.getField("person_issuername").setPartialName("person_issuerName");
+            form.getField("person_foreignIdCard").setPartialName("person_foreign");
+            form.getField("person_foreignIdCard2").setPartialName("person_foreignIdCard");
+            form.getField("person_curZip").setPartialName("person_currZip");
             if (form == null) {
                 throw new IllegalStateException("PDF does not contain an AcroForm (no form fields).");
             }
@@ -106,26 +106,49 @@ public class Main {
             resources.put(resName, font);
 
             String newDA = "/" + fontResourceName + " " + fontSize + " Tf 0 g";
-            String smallerNewDA = "/" + fontResourceName + " 6 Tf 0 g";
             String midNewDA = "/" + fontResourceName + " 7 Tf 0 g";
+            String smallerNewDA = "/" + fontResourceName + " 6 Tf 0 g";
+            String smallestNewDA = "/" + fontResourceName + " 5 Tf 0 g";
 
 //             Update DA for text-like fields
             for (PDField field : form.getFieldTree()) {
                 if (field instanceof PDTextField tf) {
-//                    if (tf.getFullyQualifiedName().equals("person_otherDocType") ||
-//                        tf.getFullyQualifiedName().equals("person_otherDocType1") ||
-//                        tf.getFullyQualifiedName().equals("employee_Name") ||
-//                        tf.getFullyQualifiedName().equals("employee_Pos") ||
-//                        tf.getFullyQualifiedName().equals("person_perm_phone") ||
-//                        tf.getFullyQualifiedName().equals("person_curr_phone")
-//                    ) {
-//                        tf.setDefaultAppearance(midNewDA);
-//                    } else if (tf.getFullyQualifiedName().equals("old_POK") ||
-//                        tf.getFullyQualifiedName().equals("old_fund")) {
-//                        tf.setDefaultAppearance(smallerNewDA);
-//                    } else {
+
+                    //todo uncomment for the transfer request
+                    if (tf.getFullyQualifiedName().equals("person_otherDocType") ||
+                        tf.getFullyQualifiedName().equals("person_otherDocType1") ||
+                        tf.getFullyQualifiedName().equals("employee_Name") ||
+                        tf.getFullyQualifiedName().equals("employee_Pos") ||
+                        tf.getFullyQualifiedName().equals("person_perm_phone") ||
+                        tf.getFullyQualifiedName().equals("person_curr_phone")||
+                        tf.getFullyQualifiedName().equals("person_issuerName")
+                    ) {
+                        tf.setDefaultAppearance(midNewDA);
+                    } else if (tf.getFullyQualifiedName().equals("old_POK") ||
+                        tf.getFullyQualifiedName().equals("old_fund") ||
+                               tf.getFullyQualifiedName().equals("new_fund")) {
+                        tf.setDefaultAppearance(smallerNewDA);
+                    } else {
                         tf.setDefaultAppearance(newDA);
+                    }
+
+
+                    //todo uncomment for the contracts
+//                    if (tf.getFullyQualifiedName().equals("person_permDistrict") ||
+//                        tf.getFullyQualifiedName().equals("person_currDistrict") ||
+//                        tf.getFullyQualifiedName().equals("person_permCity") ||
+//                        tf.getFullyQualifiedName().equals("person_currCity") ||
+//                        tf.getFullyQualifiedName().equals("person_permMin") ||
+//                        tf.getFullyQualifiedName().equals("person_currMin")){
+//                        tf.setDefaultAppearance(midNewDA);
+//                    } else {
+//                        tf.setDefaultAppearance(newDA);
 //                    }
+
+
+
+
+
                 } else if (field instanceof PDComboBox cb) {
                     cb.setDefaultAppearance(newDA);
                 } else if (field instanceof PDListBox lb) {
